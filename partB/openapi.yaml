@@ -1,0 +1,213 @@
+openapi: 3.0.0
+info:
+  title: Mini Library API
+  version: 1.0.0
+  description: Номын сан удирдлагын REST API
+
+servers:
+  - url: http://localhost:3000
+
+paths:
+  /api/books:
+    get:
+      summary: Бүх ном авах
+      parameters:
+        - in: query
+          name: title
+          schema:
+            type: string
+        - in: query
+          name: author
+          schema:
+            type: string
+        - in: query
+          name: genre
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Номын жагсаалт
+    post:
+      summary: Ном нэмэх
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [title, author]
+              properties:
+                title:
+                  type: string
+                author:
+                  type: string
+                genre:
+                  type: string
+                isbn:
+                  type: string
+      responses:
+        '201':
+          description: Ном үүсгэгдлээ
+
+  /api/books/{id}:
+    get:
+      summary: Ном авах
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Ном
+        '404':
+          description: Олдсонгүй
+    put:
+      summary: Ном засах
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Засагдлаа
+    delete:
+      summary: Ном устгах
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Устгагдлаа
+
+  /api/members:
+    get:
+      summary: Бүх гишүүн
+      responses:
+        '200':
+          description: Гишүүдийн жагсаалт
+    post:
+      summary: Гишүүн нэмэх
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, email]
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                phone:
+                  type: string
+      responses:
+        '201':
+          description: Гишүүн үүсгэгдлээ
+
+  /api/members/{id}:
+    get:
+      summary: Гишүүн авах
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Гишүүн
+        '404':
+          description: Олдсонгүй
+    put:
+      summary: Гишүүн засах
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Засагдлаа
+    delete:
+      summary: Гишүүн устгах
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Устгагдлаа
+
+  /api/loans:
+    get:
+      summary: Бүх зээлэлт
+      responses:
+        '200':
+          description: Зээлэлтийн жагсаалт
+    post:
+      summary: Зээлэлт олгох
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [book_id, member_id]
+              properties:
+                book_id:
+                  type: integer
+                member_id:
+                  type: integer
+      responses:
+        '201':
+          description: Зээлэлт олгогдлоо
+
+  /api/loans/{id}/return:
+    put:
+      summary: Ном буцаах
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Буцаагдлаа
+
+  /api/loans/overdue:
+    get:
+      summary: Хугацаа хэтэрсэн зээлэлтүүд
+      responses:
+        '200':
+          description: Хугацаа хэтэрсэн жагсаалт
+
+  /api/stats:
+    get:
+      summary: Статистик
+      responses:
+        '200':
+          description: Нийт тоо, зээлэлт, гишүүд
